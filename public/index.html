@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .data-section {
+            margin-top: 30px;
+        }
+
+        .data-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete, .btn-return {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-return {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+        }
+
+        .btn-delete:hover {
+            background: #da190b;
+        }
+
+        .btn-return:hover {
+            background: #0b7dda;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-issued {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-returned {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .availability {
+            font-weight: 600;
+        }
+
+        .available {
+            color: #4CAF50;
+        }
+
+        .unavailable {
+            color: #f44336;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .sort-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0 15px;
+        }
+
+        .sort-row label {
+            font-weight: 600;
+        }
+        
+        th span {
+            font-size: 1.2em;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+        
+        /* Better visual styling for sort indicators */
+        th[onclick] {
+            position: relative;
+        }
+        
+        th[onclick]:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Visual cue for sortable columns */
+        th[onclick] {
+            position: relative;
+        }
+        
+        th[onclick]:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Library Management System</h1>
+            <p>Manage Books, Authors, and Book Issues</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('authors')">Authors</button>
+            <button class="tab" onclick="openTab('books')">Books</button>
+            <button class="tab" onclick="openTab('issues')">Issues/Returns</button>
+        </div>
+
+        <!-- Authors Tab -->
+        <div id="authors" class="tab-content active">
+            <div class="form-section">
+                <h2>Add/Update Author</h2>
+                <form id="authorForm">
+                    <input type="hidden" id="author_id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" id="author_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="author_email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="author_bio"></textarea>
+                    </div>
+                    <button type="submit">Save Author</button>
+                    <button type="button" onclick="resetAuthorForm()" style="background: #666; margin-left: 10px;">Reset</button>
+                </form>
+            </div>
+
+            <div class="data-section">
+                <h3>All Authors</h3>
+                <!-- Sort controls are now integrated into table headers -->
+                <div id="authorsMessage"></div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('authors', 'id')" style="cursor: pointer;">ID <span id="authors-sort-id">▼</span></th>
+                            <th onclick="sortTable('authors', 'name')" style="cursor: pointer;">Name <span id="authors-sort-name">▼</span></th>
+                            <th onclick="sortTable('authors', 'email')" style="cursor: pointer;">Email <span id="authors-sort-email">▼</span></th>
+                            <th>Bio</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="authorsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Books Tab -->
+        <div id="books" class="tab-content">
+            <div class="form-section">
+                <h2>Add/Update Book</h2>
+                <form id="bookForm">
+                    <input type="hidden" id="book_id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" id="book_title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ISBN</label>
+                            <input type="text" id="book_isbn">
+                        </div>
+                        <div class="form-group">
+                            <label>Author *</label>
+                            <select id="book_author" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Publication Year</label>
+                            <input type="number" id="book_year" min="1000" max="2100">
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" id="book_genre">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Copies</label>
+                            <input type="number" id="book_total" min="1" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Available Copies</label>
+                            <input type="number" id="book_available" min="0" value="1">
+                        </div>
+                    </div>
+                    <button type="submit">Save Book</button>
+                    <button type="button" onclick="resetBookForm()" style="background: #666; margin-left: 10px;">Reset</button>
+                </form>
+            </div>
+
+            <div class="data-section">
+                <h3>All Books</h3>
+                <!-- Sort controls are now integrated into table headers -->
+                <div id="booksMessage"></div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('books', 'id')" style="cursor: pointer;">ID <span id="books-sort-id">▼</span></th>
+                            <th onclick="sortTable('books', 'title')" style="cursor: pointer;">Title <span id="books-sort-title">▼</span></th>
+                            <th>ISBN</th>
+                            <th>Author</th>
+                            <th onclick="sortTable('books', 'publication_year')" style="cursor: pointer;">Year <span id="books-sort-publication_year">▼</span></th>
+                            <th>Genre</th>
+                            <th onclick="sortTable('books', 'available_copies')" style="cursor: pointer;">Available/Total <span id="books-sort-available_copies">▼</span></th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Issues Tab -->
+        <div id="issues" class="tab-content">
+            <div class="form-section">
+                <h2>Issue a Book</h2>
+                <form id="issueForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Select Book *</label>
+                            <select id="issue_book" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Member Name *</label>
+                            <input type="text" id="issue_member_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Member Email</label>
+                            <input type="email" id="issue_member_email">
+                        </div>
+                        <div class="form-group">
+                            <label>Due Date *</label>
+                            <input type="date" id="issue_due_date" required>
+                        </div>
+                    </div>
+                    <button type="submit">Issue Book</button>
+                    <button type="button" onclick="resetIssueForm()" style="background: #666; margin-left: 10px;">Reset</button>
+                </form>
+            </div>
+
+            <div class="data-section">
+                <h3>All Issues</h3>
+                <!-- Sort controls are now integrated into table headers -->
+                <div id="issuesMessage"></div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('issues', 'id')" style="cursor: pointer;">ID <span id="issues-sort-id">▼</span></th>
+                            <th>Book</th>
+                            <th>Member</th>
+                            <th>Email</th>
+                            <th onclick="sortTable('issues', 'issue_date')" style="cursor: pointer;">Issue Date <span id="issues-sort-issue_date">▼</span></th>
+                            <th onclick="sortTable('issues', 'due_date')" style="cursor: pointer;">Due Date <span id="issues-sort-due_date">▼</span></th>
+                            <th>Return Date</th>
+                            <th onclick="sortTable('issues', 'status')" style="cursor: pointer;">Status <span id="issues-sort-status">▼</span></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issuesTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
